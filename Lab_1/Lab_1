@@ -1,0 +1,71 @@
+#include<stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <errno.h>
+#include <signal.h>
+
+void MyExit();
+void MySigInt(int signum);
+void MySigTerm(int signum);
+
+
+int main(int argc, char** argv) 
+{
+	(void)argc;
+	(void)argv;
+
+	printf("CURRENT: Process ID = %5d; Parrent Process ID = %5d\n", getpid(), getppid());
+
+	signal(SIGINT, MySigInt);
+
+	struct sigaction sigTermAct; 
+	sigTermAct.sa_handler = MySigTerm; 
+	sigemptyset(&sigTermAct.sa_mask);
+    	sigTermAct.sa_flags = 0; 
+	
+	sigaction(SIGTERM, &sigTermAct, NULL); 
+
+	atexit(MyExit);
+
+	fprintf(stdout, "Forked\n");
+	pid_t pid = fork();
+	switch (pid) {
+	case -1:
+		fprintf(stderr, "Fork error: %d", errno);
+		exit(-1);
+	case 0:
+		fprintf(stdout, "CHILD: Process ID = %5d; Parrent Process ID = %5d\n", getpid(), getppid());
+		sleep(10);
+		break;
+	default:
+		fprintf(stdout, "PARENT: Process ID = %5d; Parrent Process ID = %5d\n", getpid(), getppid());
+		sleep(10);
+		int pid = 0;
+			int w_pid = wait(&pid);
+			if (WIFSIGNALED(pid) != 0) {
+				printf("PARENT Wait return: %d Signal: %d\n", w_pid, WTERMSIG(pid));
+			}
+			exit(WEXITSTATUS(pid));
+		break;
+	}
+	return 0;
+}
+
+
+void MyExit() 
+{
+	fprintf(stdout, "=== Call of MyExit ===\n Exit from %d\n", getpid());
+}
+
+void MySigInt(int signum) 
+{
+	fprintf(stdout, "=== %d SIGINT received ===\n %d (%s)\n", getpid(), signum, strsignal(signum));
+}
+
+void MySigTerm(int signum) 
+{
+	fprintf(stdout, "=== %d SIGTERM received ===\n %d (%s)\n", getpid(), signum, strsignal(signum));
+}
