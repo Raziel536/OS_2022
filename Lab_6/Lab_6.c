@@ -14,7 +14,7 @@ int count = 0;
 
 void* writer(void* args) {
     (void)args;
-    while(1) {
+    for(int i = 0; i < 10; ++i) {
 	    pthread_mutex_lock(&mutex);
 	    ++count;
 	    sleep(4);
@@ -27,7 +27,7 @@ void* writer(void* args) {
 
 void* reader(void* args) {
 	(void)args;
-	while(1) {
+	for(int i = 0; i < 10; ++i) {
 		pthread_mutex_lock(&mutex);
 		pthread_cond_wait(&cond, &mutex);
 		printf("counter: %d tid: %ld\n", count, pthread_self());
