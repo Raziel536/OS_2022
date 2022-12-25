@@ -12,7 +12,8 @@ pthread_mutex_t mutex;
 int count = 0;
 
 void* writer(void* args) {
-    pthread_mutex_lock(&mutex);
+	(void)args;
+    	pthread_mutex_lock(&mutex);
 	++count;
 	sleep(5);
 	pthread_mutex_unlock(&mutex);
