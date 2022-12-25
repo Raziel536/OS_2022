@@ -14,11 +14,11 @@ int count = 0;
 void* writer(void* args) {
 	(void)args;
 	while(1) {
-    	pthread_mutex_lock(&mutex);
-	++count;
-	sleep(5);
-	pthread_mutex_unlock(&mutex);
-	sleep(5);
+    		pthread_mutex_lock(&mutex);
+		++count;
+		sleep(5);
+		pthread_mutex_unlock(&mutex);
+		sleep(5);
 	}
 	pthread_exit(0);
 }
