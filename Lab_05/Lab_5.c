@@ -13,7 +13,7 @@ int count = 0;
 
 void* writer(void* args) {
 	(void)args;
-	while(1) {
+	for(int i = 0; i < 10; ++i) {
     		pthread_mutex_lock(&mutex);
 		++count;
 		sleep(5);
