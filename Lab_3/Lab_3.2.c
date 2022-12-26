@@ -11,7 +11,7 @@
 #include <errno.h>
 #include <sys/mman.h>
 
-#define SHM_NAME "shmem_1"
+#define SHM_NAME "shm_fl"
 #define SHM_SIZE 64
 
 typedef struct data{
