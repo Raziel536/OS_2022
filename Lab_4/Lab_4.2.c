@@ -12,7 +12,7 @@
 #include <sys/mman.h>
 #include <sys/sem.h>
 
-#define SHM_NAME "shmem_1"
+#define SHM_NAME "shm_fl"
 #define SHM_SIZE 64
 
 int main(int argc, char** argv) {
