@@ -12,7 +12,7 @@
 #include <errno.h>
 #include <signal.h>
 
-#define SHM_NAME "smh_fl"
+#define SHM_NAME "shm_fl"
 #define SHM_SIZE 64
 
 typedef struct data {
