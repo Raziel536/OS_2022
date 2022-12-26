@@ -25,9 +25,9 @@ int main(int argc, char** argv) {
 
 	char str[SHM_SIZE];
 
-	key_t key = ftok(SHM_NAME, 1); //generate an IPC key
+	key_t key = ftok(SHM_NAME, 1); 
 
-	int shmid = shmget(key, SHM_SIZE, IPC_CREAT | 0666); //create a new shared memory segment
+	int shmid = shmget(key, SHM_SIZE, IPC_CREAT | 0666); 
 	if (shmid == -1) {
 		fprintf(stderr, "[first] shmget: %s(%d)\n", strerror(errno), errno);
 		exit(-1);
@@ -40,15 +40,15 @@ int main(int argc, char** argv) {
 	}
 
 
-	char* shm_ptr = shmat(shmid, NULL, 0); //attach a shm segment identified by shmid
+	char* shm_ptr = shmat(shmid, NULL, 0); 
 	if (!shm_ptr) {
 		printf("[first] Memory attach error\n");
 		exit(-1);
 	}
 	
-	//check that the sending program was run only once
+	
 	struct shmid_ds buf;
-	shmctl(shmid, IPC_STAT, &buf); //Copy information from the kernel data structure associated with shmid into the shmid_ds structure pointed to by buf.
+	shmctl(shmid, IPC_STAT, &buf); 
 	if(buf.shm_nattch > 1){
 		printf("There is already a sending process\n");
 		exit(0);
@@ -69,8 +69,8 @@ int main(int argc, char** argv) {
 	}
 
 	semctl(semid, 0, IPC_RMID);
-	shmdt(shm_ptr); //detach shm segment
-	shmctl(shmid, IPC_RMID, NULL); //mark the segment to be destroyed
+	shmdt(shm_ptr); 
+	shmctl(shmid, IPC_RMID, NULL); 
 	
 	return 0;
 }
